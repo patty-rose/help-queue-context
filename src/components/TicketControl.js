@@ -3,6 +3,7 @@ import NewTicketForm from './NewTicketForm';
 import TicketList from './TicketList';
 import EditTicketForm from './EditTicketForm';
 import TicketDetail from './TicketDetail';
+import { ThemeContext } from "../context/theme-context";
 
 class TicketControl extends React.Component {
 
@@ -65,6 +66,19 @@ class TicketControl extends React.Component {
   }
 
   render(){
+    // We access the context value.
+    let theme = this.context;
+
+    if (!theme) {
+      throw new Error("ThemeContext must be used within a ThemeContext.Provider!");
+    }
+    
+    // We create our button styles.
+    const buttonStyles = { 
+      backgroundColor: theme.buttonBackground, 
+      color: theme.textColor, 
+    }
+
     let currentlyVisibleState = null;
     let buttonText = null; 
     if (this.state.editing ) {      
@@ -86,12 +100,14 @@ class TicketControl extends React.Component {
     return (
       <React.Fragment>
         {currentlyVisibleState}
-        <button onClick={this.handleClick}>{buttonText}</button> 
+        <button style={buttonStyles} onClick={this.handleClick}>{buttonText}</button> 
       </React.Fragment>
     );
   }
 
+
 }
+// We've created a contextType property and set it to ThemeContext.//Then next thing we do is add a new property to the TicketControl class called contextType and set its value to the ThemeContext. This creates a context consumer for our TicketControl class that is connected to the provider component in App.js. Notice that we do this below the class declaration. Now it can access the context value from anywhere within the class by invoking this.context.
+TicketControl.contextType = ThemeContext;
 
 export default TicketControl;
-
